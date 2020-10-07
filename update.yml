@@ -210,7 +210,7 @@ actions:
       systemctl restart elasticsearch
 
   setupDatadogAgentEs:
-    - forEach(node.${this}):
+    - forEach(nodes.${this}):
         cmd[@i.id]: |-
           NODE_HOSTNAME=$(echo "${@i.url}" | sed 's/^https:\/\///')
           DD_API_KEY=$(sed -n 's/DATADOGAPIKEY=\(.*\)/\1/p' < /.jelenv) bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
