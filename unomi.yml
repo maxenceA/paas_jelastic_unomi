@@ -190,8 +190,7 @@ actions:
 
   updateReplica:
     - cmd[${nodes.es.first.id}]: |-
-        NODE_URL=${nodes.es.first.url}
-        NODE_HOSTNAME=${NODE_URL//https:\/\/}
+        NODE_HOSTNAME=$(echo "${nodes.es.first.url}" | sed 's/^https:\/\///')
         curl -s http://${NODE_HOSTNAME}:9200/_cat/indices | awk -v repl=${globals.replica} '$6!=repl {print $3}' | while read index; do
             curl -s -XPUT http://${NODE_HOSTNAME}:9200/$index/_settings \
               -H "Content-Type: application/json" \
@@ -305,8 +304,7 @@ actions:
   setupDatadogAgentEs:
     - forEach(nodes.${this}):
         cmd[${@i.id}]: |-
-          NODE_URL=${@i.url}
-          NODE_HOSTNAME=${NODE_URL//https:\/\/}
+          NODE_HOSTNAME=$(echo "${@i.url}" | sed 's/^https:\/\///')
           DD_API_KEY=$(sed -n 's/DATADOGAPIKEY=\(.*\)/\1/p' < /.jelenv) bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
           echo "hostname: es.${@i.id}" >> /etc/datadog-agent/datadog.yaml
           sed -i 's/# logs_enabled: false/logs_enabled: true/' /etc/datadog-agent/datadog.yaml
