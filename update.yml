@@ -145,7 +145,7 @@ actions:
         if (resp.result != 0) return resp;
         return {"result": 0}
     - forEach(nodes.cp):
-        cmd[@i.id]: |-
+        cmd[${@i.id}]: |-
           sed -i "/<interface>/d" $HAZELCAST_CONFIG
           sed -i "/<member>node/d" $HAZELCAST_CONFIG
           envfile=$(find /opt/jcustomer/jcustomer/bin -name setenv)
@@ -211,7 +211,7 @@ actions:
 
   setupDatadogAgentEs:
     - forEach(nodes.${this}):
-        cmd[@i.id]: |-
+        cmd[${@i.id}]: |-
           NODE_HOSTNAME=$(echo "${@i.url}" | sed 's/^https:\/\///')
           DD_API_KEY=$(sed -n 's/DATADOGAPIKEY=\(.*\)/\1/p' < /.jelenv) bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
           echo "hostname: es.${@i.id}" >> /etc/datadog-agent/datadog.yaml
