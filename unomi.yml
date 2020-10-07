@@ -305,7 +305,7 @@ actions:
   setupDatadogAgentEs:
     - forEach(nodes.${this}):
         cmd[${@i.id}]: |-
-          NODE_URL=${nodes.es.first.url}
+          NODE_URL=${@i.url}
           NODE_HOSTNAME=${NODE_URL//https:\/\/}
           DD_API_KEY=$(sed -n 's/DATADOGAPIKEY=\(.*\)/\1/p' < /.jelenv) bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
           echo "hostname: es.${@i.id}" >> /etc/datadog-agent/datadog.yaml
