@@ -144,7 +144,7 @@ actions:
         );
         if (resp.result != 0) return resp;
         return {"result": 0}
-    - forEach(cp.nodes):
+    - forEach(nodes.cp):
         cmd[@i.id]: |-
           sed -i "/<interface>/d" $HAZELCAST_CONFIG
           sed -i "/<member>node/d" $HAZELCAST_CONFIG
